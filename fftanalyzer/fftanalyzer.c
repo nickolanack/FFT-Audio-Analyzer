@@ -1,7 +1,7 @@
 /**
  *
  *
- * compile: gcc -o fourier ffourier.c -lfftw3 -lm
+ * compile: gcc -o fourier fftanalyzer.c -lfftw3 -lm
  *
  *
  *
