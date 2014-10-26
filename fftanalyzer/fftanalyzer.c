@@ -37,7 +37,7 @@ int main(char argc, char *argv[]){
  
 	FILE *fp;
 	long skipto=44600;
-	fp=fopen("goforward.raw", "r");
+	fp=fopen("goforward.wav", "r");
         if(fp){
 		
 		int16_t buf[N];
@@ -103,11 +103,11 @@ int main(char argc, char *argv[]){
 				if(i==0){
 					//this is the DC component
 					printf("\t// the first sample is the dc component\n"
-							"\t{\"m\":%0.3f, \"f\":\"DC\"},\n"
+							"\t{\"m\":%0.3f, \"f\":\"0.0\"},\n"
 							"", mag, pha);
 				}else{
 					freq=(i/(double)(samples-1))*maxfreq;
-					printf("\t{\"m\":%0.3f, \"p\":%lf, \"f_min\":%0.1f, \"f_max\":%0.1f}", mag, pha, freq-res, freq);
+					printf("\t{\"m\":%0.3f, \"p\":%lf, \"f\":%0.1f}", mag, pha, freq-(res/2.0));
 					if(i<samples-1){
 						printf(",");
 					}
@@ -118,7 +118,7 @@ int main(char argc, char *argv[]){
 
 
 			printf("\t],\n"
-					"\"samples\":%d,\n"
+					"\"count\":%d,\n"
 					"\"resolution\":%0.3f,\n"
 					"\"max_freq\":%0.3f,\n"
 					"\"time_len_sec\":%0.2f\n"
