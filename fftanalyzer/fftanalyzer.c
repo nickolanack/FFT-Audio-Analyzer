@@ -24,15 +24,17 @@ int main(char argc, char *argv[]){
 	if(fp){
 
 		int N =512;
+
 		fseek(fp, 44600, SEEK_CUR);
 
 		int16_t buf[N];
 		size_t len;
 		size_t bytes=sizeof(int16_t);
 		double *in;
-		in = (double*) malloc(sizeof(double) * N);
-		memset(in, 0, sizeof (double) * N);
+		fftw_plan p;
+		fft_init(in, N);
 
+		return 0;
 
 		if(!feof(fp)){
 
@@ -49,7 +51,7 @@ int main(char argc, char *argv[]){
 				//memset(in, 0, sizeof (double) * N);
 			}
 
-			fft(in, len);
+			fft(p, len);
 		}
 
 
@@ -65,23 +67,31 @@ int main(char argc, char *argv[]){
 
 }
 
+void fft_init(double *in, int length){
+
+
+	in = (double*) malloc(sizeof(double) * length);
+	memset(in, 0, sizeof (double) * length);
+
+	fftw_complex* out;
+	out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * length);
+	memset(out, 0, sizeof (fftw_complex) * length);
+
+	fftw_plan p;
+	p = fftw_plan_dft_r2c_1d(length, in, out, FFTW_MEASURE);
+
+	//return void;
+}
+
 /**
  * @param FILE stream, file handle or stdin
  * @param int N number of samples to use for fft transform
  */
-int fft(double *in, int length){
+int fft(fftw_plan p, int length){
 
-
+	double *in;
 	fftw_complex* out;
 
-	fftw_plan p;
-	// ...
-
-	out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * length);
-
-	memset(out, 0, sizeof (fftw_complex) * length);
-	p = fftw_plan_dft_r2c_1d(length, in, out, FFTW_MEASURE);
-	// ...
 
 	fftw_execute(p); /* repeat as needed */
 
